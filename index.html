@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 win GHOP GHOP $</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: radial-gradient(circle at top, #1e1b4b 0%, #090d16 65%, #05070d 100%);
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 3D Password Lock Screen */
+        .lock-screen {
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(165deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 22px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow:
+                0 24px 50px rgba(0, 0, 0, 0.75),
+                0 8px 0 #070b14,
+                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            transform: perspective(900px) rotateX(2deg);
+        }
+
+        .lock-icon {
+            font-size: 46px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 8px 14px rgba(56, 189, 248, 0.45));
+        }
+
+        .lock-title {
+            margin: 0 0 6px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #38bdf8;
+        }
+
+        .lock-sub {
+            margin: 0 0 18px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .pass-input {
+            width: 100%;
+            padding: 13px 15px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: #090d16;
+            color: #facc15;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1.5px;
+            outline: none;
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.7);
+            margin-bottom: 14px;
+        }
+
+        .pass-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), inset 0 3px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .unlock-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #38bdf8, #0284c7);
+            color: #04101e;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #0369a1, 0 12px 22px rgba(2, 132, 199, 0.4);
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+        .unlock-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0369a1, 0 5px 12px rgba(2, 132, 199, 0.3);
+        }
+
+        .error-msg {
+            min-height: 20px;
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #f87171;
+        }
+
+        /* Main 3D Dashboard */
+        .dashboard {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            background: linear-gradient(170deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 26px;
+            padding: 22px 18px 24px;
+            text-align: center;
+            box-shadow:
+                0 28px 60px rgba(0, 0, 0, 0.8),
+                0 10px 0 #060911,
+                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+
+        .top-banner {
+            background: linear-gradient(135deg, #f59e0b 0%, #eab308 45%, #fde047 100%);
+            color: #090d16;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            padding: 13px 14px;
+            border-radius: 16px;
+            box-shadow:
+                0 7px 0 #a16207,
+                0 14px 26px rgba(234, 179, 8, 0.35),
+                inset 0 2px 0 rgba(255, 255, 255, 0.65);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        /* Promo Card */
+        .promo-box {
+            background: linear-gradient(180deg, #131c31, #0b1120);
+            border: 1px solid rgba(250, 204, 21, 0.45);
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 16px;
+            box-shadow:
+                0 6px 0 #050811,
+                0 12px 20px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .promo-offer {
+            display: block;
+            font-size: 13px;
+            font-weight: 800;
+            color: #4ade80;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+        }
+
+        .promo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .promo-code {
+            background: #060911;
+            border: 1px dashed #facc15;
+            color: #facc15;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            padding: 8px 14px;
+            border-radius: 11px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .copy-btn {
+            background: linear-gradient(180deg, #fbbf24, #d97706);
+            color: #090d16;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #92400e, 0 8px 14px rgba(217, 119, 6, 0.35);
+            transition: transform 0.1s ease;
+        }
+
+        .copy-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #92400e;
+        }
+
+        /* 3D Section Card */
+        .card-3d {
+            background: linear-gradient(180deg, #162038, #0c1324);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 20px;
+            padding: 16px 14px;
+            margin-top: 16px;
+            box-shadow:
+                0 8px 0 #050811,
+                0 16px 28px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            margin: 0 0 6px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #e2e8f0;
+        }
+
+        .card-sub {
+            margin: 0 0 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #facc15;
+        }
+
+        /* Mines Count Selector */
+        .mines-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-width: 310px;
+            margin: 0 auto 14px;
+        }
+
+        .mine-opt-btn {
+            background: linear-gradient(180deg, #334155, #1e293b);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 9px 6px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0f172a;
+            transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease;
+        }
+
+        .mine-opt-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0f172a;
+        }
+
+        .mine-opt-btn.active {
+            background: linear-gradient(180deg, #facc15, #eab308);
+            color: #090d16;
+            border-color: #fef08a;
+            box-shadow: 0 4px 0 #a16207, 0 0 12px rgba(250, 204, 21, 0.45);
+        }
+
+        /* 3D Mines Grid */
+        .grid-3d {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-width: 280px;
+            margin: 0 auto 14px;
+            perspective: 600px;
+        }
+
+        .tile-3d {
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(180deg, #334155, #1e293b);
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow:
+                0 5px 0 #0f172a,
+                0 8px 12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .tile-3d.mine-3d {
+            background: linear-gradient(180deg, #f87171, #dc2626);
+            color: #ffffff;
+            box-shadow:
+                0 5px 0 #7f1d1d,
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .tile-3d.safe-3d {
+            background: linear-gradient(180deg, #fef08a, #eab308);
+            color: #090d16;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow:
+                0 6px 0 #a16207,
+                0 0 16px rgba(250, 204, 21, 0.7),
+                inset 0 2px 0 rgba(255, 255, 255, 0.75);
+        }
+
+        /* 3D Action Buttons */
+        .btn-3d {
+            background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 13px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #1e3a8a, 0 12px 20px rgba(37, 99, 235, 0.4);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #1e3a8a;
+        }
+
+        .open-1win-3d {
+            display: block;
+            margin-top: 20px;
+            padding: 15px 18px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #22c55e, #15803d);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            box-shadow:
+                0 7px 0 #14532d,
+                0 14px 24px rgba(22, 163, 74, 0.45),
+                inset 0 2px 0 rgba(255, 255, 255, 0.35);
+            transition: transform 0.12s ease;
+        }
+
+        .open-1win-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 3px 0 #14532d;
+        }
+
+        .note {
+            margin-top: 14px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Password Gate -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-icon">🔐</div>
+        <h1 class="lock-title">Enter Access Password</h1>
+        <p class="lock-sub">Dashboard unlock karne ke liye password dalein</p>
+        <input
+            type="password"
+            id="passwordInput"
+            class="pass-input"
+            placeholder="Password..."
+            onkeydown="if(event.key === 'Enter') unlockSite()"
+        />
+        <button class="unlock-btn" onclick="unlockSite()">Unlock Site</button>
+        <div class="error-msg" id="errorMsg"></div>
+    </div>
+
+    <!-- Main 3D Site -->
+    <div class="dashboard" id="dashboard">
+        <div class="top-banner">1 win GHOP GHOP $</div>
+
+        <div class="promo-box">
+            <span class="promo-offer">use code get upto 1000$ bonus</span>
+            <div class="promo-row">
+                <span class="promo-code" id="promoCode">1w_57063</span>
+                <button class="copy-btn" onclick="copyPromo()">Copy</button>
+            </div>
+        </div>
+
+        <!-- Mines Only (2, 3, 5, 7 Mines Selector + 3 Safe Tiles) -->
+        <div class="card-3d">
+            <h2 class="card-title">💣 Mines Signal</h2>
+            <p class="card-sub" id="minesSubText">7 Mines (💣) • 3 Safe Tiles (⭐)</p>
+
+            <div class="mines-selector">
+                <button type="button" class="mine-opt-btn" data-mines="2" onclick="selectMinesCount(2)">2 Mines</button>
+                <button type="button" class="mine-opt-btn" data-mines="3" onclick="selectMinesCount(3)">3 Mines</button>
+                <button type="button" class="mine-opt-btn" data-mines="5" onclick="selectMinesCount(5)">5 Mines</button>
+                <button type="button" class="mine-opt-btn active" data-mines="7" onclick="selectMinesCount(7)">7 Mines</button>
+            </div>
+
+            <div class="grid-3d" id="minesGrid"></div>
+            <button class="btn-3d" onclick="generateMines()">Generate Mines Signal</button>
+        </div>
+
+        <a
+            href="https://1wxnxg.life/?open=register&p=4w73u"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="open-1win-3d"
+        >
+            Download 1win
+        </a>
+
+        <p class="note">Random demo signals only. Actual outcomes are independent.</p>
+    </div>
+
+    <script>
+        const CORRECT_PASSWORD = "Futurepro";
+        let selectedMinesCount = 7;
+        const SAFE_TILES_COUNT = 3;
+
+        function unlockSite() {
+            const input = document.getElementById("passwordInput");
+            const errorEl = document.getElementById("errorMsg");
+            const entered = input.value.trim();
+
+            if (entered.toLowerCase() === CORRECT_PASSWORD.toLowerCase()) {
+                errorEl.textContent = "";
+                document.getElementById("lockScreen").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+            } else {
+                errorEl.textContent = "Galat password! Sahi password dalein.";
+            }
+        }
+
+        function copyPromo() {
+            const code = document.getElementById("promoCode").textContent.trim();
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Promo code copied: " + code);
+            });
+        }
+
+        const minesGrid = document.getElementById("minesGrid");
+
+        function buildMinesGrid() {
+            minesGrid.innerHTML = "";
+            for (let i = 0; i < 25; i++) {
+                const tile = document.createElement("div");
+                tile.className = "tile-3d";
+                minesGrid.appendChild(tile);
+            }
+        }
+
+        function selectMinesCount(count) {
+            selectedMinesCount = count;
+            document.getElementById("minesSubText").textContent =
+                `${selectedMinesCount} Mines (💣) • ${SAFE_TILES_COUNT} Safe Tiles (⭐)`;
+
+            document.querySelectorAll(".mine-opt-btn").forEach((btn) => {
+                if (Number(btn.dataset.mines) === count) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+
+            generateMines();
+        }
+
+        function generateMines() {
+            buildMinesGrid();
+            const tiles = document.querySelectorAll(".tile-3d");
+            const pickedIndices = [];
+            const totalNeeded = selectedMinesCount + SAFE_TILES_COUNT;
+
+            while (pickedIndices.length < totalNeeded) {
+                const rand = Math.floor(Math.random() * 25);
+                if (!pickedIndices.includes(rand)) {
+                    pickedIndices.push(rand);
+                }
+            }
+
+            const mineIndices = pickedIndices.slice(0, selectedMinesCount);
+            const safeIndices = pickedIndices.slice(selectedMinesCount);
+
+            mineIndices.forEach((idx) => {
+                tiles[idx].classList.add("mine-3d");
+                tiles[idx].textContent = "💣";
+            });
+
+            safeIndices.forEach((idx) => {
+                tiles[idx].classList.add("safe-3d");
+                tiles[idx].textContent = "⭐";
+            });
+        }
+
+        buildMinesGrid();
+    </script>
+</body>
+</html>
